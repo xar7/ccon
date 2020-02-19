@@ -14,27 +14,36 @@
 
 int main(int argc, char **argv) {
     (void) argc;
-    (void) argv;
-    uint64_t stack_size = 0x10000;
 
-    LOG("Initializing stack_size to: 0x%lx.", stack_size);
-    void *stack = mmap(NULL, stack_size, PROT_READ | PROT_WRITE,
+    /* Container option */
+    struct container_option options = {
+        .hostname = "ccontainer",
+        .stack_size = 0x1000,
+    };
+
+    LOG("Initializing stack_size to: 0x%lx.", options.stack_size);
+    void *stack = mmap(NULL, options.stack_size, PROT_READ | PROT_WRITE,
                        MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
 
     if (stack == MAP_FAILED)
         return 1;
 
-    void *stack_top = (char *) stack + stack_size;
-    pid_t tid = clone(child_function, stack_top, CLONE_NEWUTS | CLONE_NEWUSER | SIGCHLD, argv + 1);
+    struct container_arg container_arg = {
+        .argv = argv + 1,
+        .opt = &options,
+    };
+    void *stack_top = (char *) stack + options.stack_size;
+    pid_t tid = clone(container_function, stack_top, CLONE_NEWUTS | CLONE_NEWUSER | SIGCHLD, &container_arg);
     if (tid == -1) {
-        LOGERR("Clone failed");
+        LOGERR("clone failed");
         return 1;
     }
 
     int wstatus;
     if (waitpid(tid, &wstatus, 0) == -1) {
-        LOGERR("Waitpid failed!");
+        LOGERR("waitpid failed!");
     }
+    LOG("child process exited with status code: %d", WEXITSTATUS(wstatus));
 
     return 0;
 }
