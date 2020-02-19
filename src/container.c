@@ -9,7 +9,6 @@
 
 #define SETENV_OVERWRITE 1
 
-
 int set_container_env(struct container_arg *arg) {
     if (sethostname(arg->opt->hostname, strlen(arg->opt->hostname)) < 0) {
         LOGERR("sethostname failed");
@@ -44,7 +43,7 @@ int set_container_fs() {
 }
 
 int container_function(void *raw_arg) {
-    LOG("Entering child function.");
+    LOG("Entering container function.");
 
     struct container_arg *arg = (struct container_arg *) raw_arg;
     if (!arg->argv[0]) {
@@ -52,7 +51,6 @@ int container_function(void *raw_arg) {
         return 1;
     }
 
-    //LOG("Setting the container hostname to : %s.", arg->opt->hostname);
     if (set_container_env(arg) != 0) {
         LOGERR("an error occured in the container environment setup");
         return 1;
@@ -63,7 +61,6 @@ int container_function(void *raw_arg) {
     }
 
     char **exec_argv = arg->argv;
-    //LOG("Calling execvp for : %s", exec_argv[0]);
     if (execvp(exec_argv[0], exec_argv) == -1) {
         LOGERR("execvp failed");
         return 1;
