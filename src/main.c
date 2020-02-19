@@ -19,6 +19,7 @@ int main(int argc, char **argv) {
     struct container_option options = {
         .hostname = "ccontainer",
         .stack_size = 0x1000,
+        .rootfs = "testfs",
     };
 
     LOG("Initializing stack_size to: 0x%lx.", options.stack_size);
@@ -33,7 +34,9 @@ int main(int argc, char **argv) {
         .opt = &options,
     };
     void *stack_top = (char *) stack + options.stack_size;
-    pid_t tid = clone(container_function, stack_top, CLONE_NEWUTS | CLONE_NEWUSER | SIGCHLD, &container_arg);
+    pid_t tid = clone(container_function, stack_top,
+                      CLONE_NEWUTS | CLONE_NEWPID| CLONE_NEWNS | SIGCHLD,
+                      &container_arg);
     if (tid == -1) {
         LOGERR("clone failed");
         return 1;

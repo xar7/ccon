@@ -5,6 +5,7 @@
 
 struct container_option {
     char *hostname;
+    char *rootfs;
     uint64_t stack_size;
 };
 

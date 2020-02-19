@@ -1,0 +1,7 @@
+# CCON
+ccon is container-like application written in pure C.
+This is a small hobby repo, the purpose was to learn about linux namespaces and cgroups.
+
+## Usage
+   In order to use ccon you have to get a minimal linux rootfs.
+   `./ccon <rootfs> <cmd> `

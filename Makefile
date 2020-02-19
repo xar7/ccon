@@ -1,4 +1,5 @@
 CFLAGS += -Wall -Werror -Wextra -std=c99 -g
+
 OBJS = src/main.o src/container.o
 BIN = ccon
 
