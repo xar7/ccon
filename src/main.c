@@ -14,11 +14,17 @@
 int child_function(void *arg) {
     (void) arg;
     LOG("Entering child function.");
+    char *hostname = "ccontainer";
+    LOG("Setting the container hostname to : %s.", hostname);
+    if (sethostname(hostname, strlen(hostname)) < 0) {
+        LOGERR("sethostname failed");
+        return 1;
+    }
 
     char **exec_argv = (char **) arg;
     LOG("Calling execvp for : %s", exec_argv[0]);
     if (execvp(exec_argv[0], exec_argv) == -1) {
-        LOG("Execvp failed.");
+        LOGERR("execvp failed");
         return 1;
     }
 
@@ -38,13 +44,15 @@ int main(int argc, char **argv) {
         return 1;
 
     void *stack_top = (char *) stack + stack_size;
-    pid_t tid = clone(child_function, stack_top, CLONE_CHILD_CLEARTID | CLONE_CHILD_SETTID |SIGCHLD, argv + 1);
-    if (tid == -1)
+    pid_t tid = clone(child_function, stack_top, CLONE_NEWUTS | CLONE_NEWUSER | SIGCHLD, argv + 1);
+    if (tid == -1) {
+        LOGERR("Clone failed");
         return 1;
+    }
 
     int wstatus;
     if (waitpid(tid, &wstatus, 0) == -1) {
-        LOG("Waitpid failed!");
+        LOGERR("Waitpid failed!");
     }
 
     return 0;
