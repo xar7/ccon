@@ -10,26 +10,7 @@
 #include <sys/wait.h>
 
 #include "include/debug.h"
-
-int child_function(void *arg) {
-    (void) arg;
-    LOG("Entering child function.");
-    char *hostname = "ccontainer";
-    LOG("Setting the container hostname to : %s.", hostname);
-    if (sethostname(hostname, strlen(hostname)) < 0) {
-        LOGERR("sethostname failed");
-        return 1;
-    }
-
-    char **exec_argv = (char **) arg;
-    LOG("Calling execvp for : %s", exec_argv[0]);
-    if (execvp(exec_argv[0], exec_argv) == -1) {
-        LOGERR("execvp failed");
-        return 1;
-    }
-
-    return 0;
-}
+#include "include/container.h"
 
 int main(int argc, char **argv) {
     (void) argc;
