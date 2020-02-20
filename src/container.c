@@ -26,13 +26,11 @@ int set_container_env(struct container_arg *arg) {
 
     CALL(setenv("PS1", "cconsh$ ", SETENV_OVERWRITE));
     CALL(setenv("PATH", "/bin", SETENV_OVERWRITE));
-
     return 0;
 }
 
 int set_container_fs() {
     CALL(mount("/proc", "/proc", "proc", 0, ""));
-
     return 0;
 }
 
@@ -44,18 +42,15 @@ int container_function(void *raw_arg) {
         puts("Usage: ./ccon <cmd>");
         return 1;
     }
-
     if (set_container_env(arg) != 0) {
         LOGERR("an error occured in the container environment setup");
         return 1;
     }
-
     if (set_container_fs() != 0) {
         return 1;
     }
 
     pid_t pid = fork();
-
     if (pid == -1) {
         LOGERR("fork failed!");
         return 1;

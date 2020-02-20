@@ -2,6 +2,10 @@
 ccon is container-like application written in pure C.
 This is a small hobby repo, the purpose was to learn about linux namespaces and cgroups.
 
+## Making
+   `make` will generate you a `cconfs` directory containing a busybox and an empty rootfs-like directory tree.
+
 ## Usage
-   In order to use ccon you have to get a minimal linux rootfs.
-   `./ccon <rootfs> <cmd> `
+   Typical usage is to pop a shell inside the container and then to do anything you want:
+   `./ccon /bin/busybox sh`
+   In order to be able to launch every busybox cmd without having to write `busybox <cmd>` you can run `busybox --install`.
