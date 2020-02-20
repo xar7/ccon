@@ -10,6 +10,7 @@ struct container_option {
 };
 
 struct container_arg {
+    int argc;
     char **argv;
     struct container_option *opt;
 };

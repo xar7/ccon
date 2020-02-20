@@ -61,6 +61,7 @@ int container_function(void *raw_arg) {
     }
 
     char **exec_argv = arg->argv;
+
     if (execvp(exec_argv[0], exec_argv) == -1) {
         LOGERR("execvp failed");
         return 1;

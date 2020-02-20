@@ -30,6 +30,7 @@ int main(int argc, char **argv) {
         return 1;
 
     struct container_arg container_arg = {
+        .argc = argc - 1;
         .argv = argv + 1,
         .opt = &options,
     };
