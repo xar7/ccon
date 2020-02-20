@@ -1,43 +1,37 @@
 #define _GNU_SOURCE
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <sys/mount.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #include "include/container.h"
 #include "include/debug.h"
 
 #define SETENV_OVERWRITE 1
 
+#define CALL(syscall)                           \
+    if (syscall == -1) {                        \
+        perror(NULL);                           \
+        return 1;                               \
+    }                                           \
+
 int set_container_env(struct container_arg *arg) {
-    if (sethostname(arg->opt->hostname, strlen(arg->opt->hostname)) < 0) {
-        LOGERR("sethostname failed");
-        return 1;
-    }
+    CALL(sethostname(arg->opt->hostname, strlen(arg->opt->hostname)));
 
-    if (chroot(arg->opt->rootfs) == -1) {
-        LOGERR("chroot failed");
-        return 1;
-    }
+    CALL(chroot(arg->opt->rootfs));
+    CALL(chdir("/"));
 
-    if (chdir("/") == -1) {
-        LOGERR("chdir failed");
-        return 1;
-    }
-
-    if (setenv("PS1", "cconsh$ ", SETENV_OVERWRITE) == -1) {
-        LOGERR("setenv failed");
-        return 1;
-    }
+    CALL(setenv("PS1", "cconsh$ ", SETENV_OVERWRITE));
+    CALL(setenv("PATH", "/bin", SETENV_OVERWRITE));
 
     return 0;
 }
 
 int set_container_fs() {
-    if (mount("/proc", "/proc", "proc", 0, "") == -1) {
-        LOGERR("mounting proc failed");
-        return 1;
-    }
+    CALL(mount("/proc", "/proc", "proc", 0, ""));
 
     return 0;
 }
@@ -60,11 +54,22 @@ int container_function(void *raw_arg) {
         return 1;
     }
 
-    char **exec_argv = arg->argv;
+    pid_t pid = fork();
 
-    if (execvp(exec_argv[0], exec_argv) == -1) {
-        LOGERR("execvp failed");
+    if (pid == -1) {
+        LOGERR("fork failed!");
         return 1;
+    }
+
+    /* Child */
+    if (pid == 0) {
+        char **exec_argv = arg->argv;
+        CALL(execvp(exec_argv[0], exec_argv));
+    }
+    else {
+        int wstatus;
+        CALL(waitpid(pid, &wstatus, 0));
+        CALL(umount("proc"));
     }
 
     return 0;

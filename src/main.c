@@ -18,8 +18,8 @@ int main(int argc, char **argv) {
     /* Container option */
     struct container_option options = {
         .hostname = "ccontainer",
+        .rootfs = "cconfs",
         .stack_size = 0x1000,
-        .rootfs = "testfs",
     };
 
     LOG("Initializing stack_size to: 0x%lx.", options.stack_size);
