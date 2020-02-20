@@ -8,4 +8,4 @@ This is a small hobby repo, the purpose was to learn about linux namespaces and 
 ## Usage
    Typical usage is to pop a shell inside the container and then to do anything you want:
    `./ccon /bin/busybox sh`
-   In order to be able to launch every busybox cmd without having to write `busybox <cmd>` you can run `busybox --install`.
+   In order to be able to launch every busybox cmd without having to write `busybox <cmd>` you can run `busybox --install` inside the ccontainer.

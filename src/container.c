@@ -56,12 +56,11 @@ int container_function(void *raw_arg) {
         return 1;
     }
 
-    /* Child */
-    if (pid == 0) {
+    if (pid == 0) {                      /* Child */
         char **exec_argv = arg->argv;
         CALL(execvp(exec_argv[0], exec_argv));
     }
-    else {
+    else {                               /* Parent */
         int wstatus;
         CALL(waitpid(pid, &wstatus, 0));
         CALL(umount("proc"));
