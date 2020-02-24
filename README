@@ -9,3 +9,8 @@ This is a small hobby repo, the purpose was to learn about linux namespaces and 
    Typical usage is to pop a shell inside the container and then to do anything you want:
    `./ccon /bin/busybox sh`
    In order to be able to launch every busybox cmd without having to write `busybox <cmd>` you can run `busybox --install` inside the ccontainer.
+
+## Cgroups
+   There is currently two different versions of cgroups implemented in the linux kernel. cgroupv2 is the future but most applications (e.g. systemd) still use cgroupv1 by default. As it is impossible to create a v2 and v1 cgroup controller on the same machine, I decided to implement cgroupv1 first to assure that it would work with most linux setups.
+   The only cgroup controller implemented so far is the pid controller limiting the number of processes inside the ccontainer, protecting it from fork bombs.
+

@@ -21,8 +21,8 @@ int main(int argc, char **argv) {
         .stack_size = 0x1000,
     };
 
-    LOG("Creating the (sub)cgroun ccon.");
-    if (set_cgroup(&options) != 0) {
+    LOG("Creating the (sub)cgroup ccon.");
+    if (set_cgroup() != 0) {
         return 1;
     }
 
