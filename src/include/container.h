@@ -17,4 +17,10 @@ struct container_arg {
 
 int container_function(void *arg);
 
+#define CALL(syscall)                            \
+    if (syscall == -1) {                         \
+        perror(NULL);                            \
+        return -1;                               \
+    }                                            \
+
 #endif /* CCON_CONTAINER */
