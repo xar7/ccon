@@ -1,6 +1,7 @@
+CC ?= clang
 CFLAGS += -Wall -Werror -Wextra -std=c99 -g
 
-OBJS = src/main.o src/container.o
+OBJS = src/main.o src/container.o src/cgroup.o
 BIN = ccon
 BUSYBOX_DL_URL = https://www.busybox.net/downloads/binaries/1.31.0-defconfig-multiarch-musl/busybox-x86_64
 FS=cconfs

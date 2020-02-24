@@ -10,17 +10,21 @@
 #include <sys/wait.h>
 
 #include "include/debug.h"
+#include "include/cgroup.h"
 #include "include/container.h"
 
 int main(int argc, char **argv) {
-    (void) argc;
 
-    /* Container option */
     struct container_option options = {
         .hostname = "ccontainer",
         .rootfs = "cconfs",
         .stack_size = 0x1000,
     };
+
+    LOG("Creating the (sub)cgroun ccon.");
+    if (set_cgroup(&options) != 0) {
+        return 1;
+    }
 
     LOG("Initializing stack_size to: 0x%lx.", options.stack_size);
     void *stack = mmap(NULL, options.stack_size, PROT_READ | PROT_WRITE,
