@@ -9,7 +9,7 @@ FS=cconfs
 all: $(BIN) $(FS)
 
 $(FS):
-	mkdir -p $(FS)/{bin,boot,dev,etc,home,lib,mnt,opt,proc,root,run,sbin,sys/fs/{cgroup2, cgroup/pids},usr/{sbin,bin,lib},var,tmp}
+	mkdir -p $(FS)/{bin,boot,dev,etc,home,lib,mnt,opt,proc,root,run,sbin,sys/fs/{cgroup2,cgroup/pids},usr/{sbin,bin,lib},var,tmp}
 	curl $(BUSYBOX_DL_URL) -o $(FS)/bin/busybox
 	chmod +x $(FS)/bin/busybox
 
