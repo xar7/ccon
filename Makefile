@@ -1,5 +1,5 @@
 CC ?= clang
-CFLAGS += -Wall -Werror -Wextra -std=c99 -g
+CFLAGS += -Wall -Werror -Wextra -std=c99
 
 OBJS = src/main.o src/container.o src/cgroup.o
 BIN = ccon

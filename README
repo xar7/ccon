@@ -1,16 +1,18 @@
 # CCON
 ccon is container-like application written in pure C.
-This is a small hobby repo, the purpose was to learn about linux namespaces and cgroups.
+This is a small hobby repo, the purpose was to learn about linux namespaces and cgroups. Manipulating cgroups and namespaces to create a 'container' is actually really simple and can be made in a few lines of bash.
 
 ## Making
    `make` will generate you a `cconfs` directory containing a busybox and an empty rootfs-like directory tree.
 
 ## Usage
    Typical usage is to pop a shell inside the container and then to do anything you want:
-   `./ccon /bin/busybox sh`
-   In order to be able to launch every busybox cmd without having to write `busybox <cmd>` you can run `busybox --install` inside the ccontainer.
+   `# sudo ./ccon /bin/busybox sh`
+   In order to be able to launch every busybox cmd without having to prefix it with busybox:
+   `# sudo ./ccon /bin/busybox sh`
+   `cconsh$ busybox --install`
 
 ## Cgroups
-   There is currently two different versions of cgroups implemented in the linux kernel. cgroupv2 is the future but most applications (e.g. systemd) still use cgroupv1 by default. As it is impossible to create a v2 and v1 cgroup controller on the same machine, I decided to implement cgroupv1 first to assure that it would work with most linux setups.
-   The only cgroup controller implemented so far is the pid controller limiting the number of processes inside the ccontainer, protecting it from fork bombs.
+   There is currently two different versions of cgroups implemented in the linux kernel. cgroupv2 is the future but most applications (e.g. systemd) still use cgroupv1 by default. As it is impossible to create a v2 and v1 cgroup controller on the same machine, this function use cgroupv1 to assure that it would work with most linux setups.
+   The only cgroup controller implemented so far is the pid controller limiting the number of processes inside the ccontainer (to 10), protecting it from fork bombs.
 
