@@ -1,6 +1,6 @@
 # CCON
 ccon is container-like application written in pure C.
-This is a small hobby repo, the purpose was to learn about linux namespaces and cgroups.
+This is a small hobby repo, the purpose was to learn about linux namespaces and cgroups. Manipulating cgroups and namespaces to create a 'container' is actually really simple and can be made in a few lines of bash.
 
 ## Making
    In order to be able to pop up a shell and to use it conveniently the `make all` rule of the Makefile downloads a small busybox binary and puts it in a rootfs like directory. As the version of busybox is evolving and the internet is volatile it is highly possible that the url  written in the Makefile is dead at the time you're trying to use it. Just replace it by a url of a working busybox binary for your system and it should work.
@@ -8,10 +8,12 @@ This is a small hobby repo, the purpose was to learn about linux namespaces and 
 
 ## Usage
    Typical usage is to pop a shell inside the container and then to do anything you want:
-   `./ccon /bin/busybox sh`
-   In order to be able to launch every busybox cmd without having to write `busybox <cmd>` you can run `busybox --install` inside the ccontainer.
+   `# sudo ./ccon /bin/busybox sh`
+   In order to be able to launch every busybox cmd without having to prefix it with busybox:
+   `# sudo ./ccon /bin/busybox sh`
+   `cconsh$ busybox --install`
 
 ## Cgroups
-   There is currently two different versions of cgroups implemented in the linux kernel. cgroupv2 is the future but most applications (e.g. systemd) still use cgroupv1 by default. As it is impossible to create a v2 and v1 cgroup controller on the same machine, I decided to implement cgroupv1 first to assure that it would work with most linux setups.
-   The only cgroup controller implemented so far is the pid controller limiting the number of processes inside the ccontainer, protecting it from fork bombs.
+   There is currently two different versions of cgroups implemented in the linux kernel. cgroupv2 is the future but most applications (e.g. systemd) still use cgroupv1 by default. As it is impossible to create a v2 and v1 cgroup controller on the same machine, this function use cgroupv1 to assure that it would work with most linux setups.
+   The only cgroup controller implemented so far is the pid controller limiting the number of processes inside the ccontainer (to 10), protecting it from fork bombs.
 

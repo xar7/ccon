@@ -21,7 +21,8 @@ int set_container_env(struct container_arg *arg) {
     CALL(chroot(arg->opt->rootfs));
     CALL(chdir("/"));
 
-    CALL(setenv("PS1", "cconsh:\\w$ ", SETENV_OVERWRITE));
+    CALL(setenv("HOST", "ccon", SETENV_OVERWRITE));
+    CALL(setenv("PS1", "sh@\\h:\\w$ ", SETENV_OVERWRITE));
     CALL(setenv("PATH", "/bin", SETENV_OVERWRITE));
     return 0;
 }
