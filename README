@@ -3,7 +3,8 @@ ccon is container-like application written in pure C.
 This is a small hobby repo, the purpose was to learn about linux namespaces and cgroups.
 
 ## Making
-   `make` will generate you a `cconfs` directory containing a busybox and an empty rootfs-like directory tree.
+   In order to be able to pop up a shell and to use it conveniently the `make all` rule of the Makefile downloads a small busybox binary and puts it in a rootfs like directory. As the version of busybox is evolving and the internet is volatile it is highly possible that the url  written in the Makefile is dead at the time you're trying to use it. Just replace it by a url of a working busybox binary for your system and it should work.
+   However the Makefile is just here for convenience and does nothing serious (you should be able to open and read it easily). In order to be able to test/use ccon you just have to create a `cconfs` directory with some working binaries in `/bin`.
 
 ## Usage
    Typical usage is to pop a shell inside the container and then to do anything you want:
